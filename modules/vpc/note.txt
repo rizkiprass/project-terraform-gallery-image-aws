@@ -1,0 +1,1 @@
+- nat only 1 az
