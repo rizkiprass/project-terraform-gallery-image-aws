@@ -68,6 +68,43 @@ resource "aws_security_group" "app-sg" {
 }
 
 ########################
+##Security Group web server
+########################
+
+resource "aws_security_group" "web-sg" {
+  name        = "${var.name}-web-sg"
+  description = var.description_web
+  vpc_id      = var.vpc_id
+
+  dynamic "ingress" {
+    for_each = var.web-port-list
+    content {
+      from_port       = ingress.value
+      to_port         = ingress.value
+      protocol        = "tcp"
+      cidr_blocks     = var.cidr != "" ? [var.cidr] : []
+      security_groups = [aws_security_group.web-sg.id]
+      description     = ingress.key
+    }
+  }
+
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    cidr_blocks = [
+    "0.0.0.0/0"]
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = {
+    Name = "${var.name}-app-sg"
+  }
+}
+
+########################
 ##Security Group db
 ########################
 

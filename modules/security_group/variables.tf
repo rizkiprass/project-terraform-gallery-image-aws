@@ -10,6 +10,10 @@ variable "description_app" {
   default = ""
 }
 
+variable "description_web" {
+  default = ""
+}
+
 variable "description_db" {
   default = ""
 }
@@ -33,7 +37,14 @@ variable "alb-port-list" {
 variable "application-port-list" {
   type = map(any)
   default = {
-    "http"  = 80
+    "tcp"  = 8080
+  }
+}
+
+variable "web-port-list" {
+  type = map(any)
+  default = {
+    "tcp"  = 80
     "https" = 443
     "ssh"   = 22
   }
